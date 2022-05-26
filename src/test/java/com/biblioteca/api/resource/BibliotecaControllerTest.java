@@ -2,6 +2,7 @@ package com.biblioteca.api.resource;
 
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.dto.BookDTO;
+import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +48,7 @@ public class BibliotecaControllerTest {
     @DisplayName("Criar um livro")
     public void createBookTeste() throws Exception {
 
-        BookDTO dto = BookDTO.builder().author("joao").title("procastinaçao").isbn("124").build();
+        BookDTO dto = createBook();
         Book savedBook = Book.builder().id(1l).author("joao").title("procastinaçao").isbn("124").build();
         BDDMockito.given(bibliotecaService.save(Mockito.any(Book.class))).willReturn(savedBook);
         String json = new ObjectMapper().writeValueAsString(dto);
@@ -68,6 +69,10 @@ public class BibliotecaControllerTest {
             ;
     }
 
+    private BookDTO createBook() {
+        return BookDTO.builder().author("joao").title("procastinaçao").isbn("124").build();
+    }
+
     @Test
     @DisplayName("Lançar erro quando nao houver dados suficientes para salvar")
     public void createInvalidBookTest() throws Exception {
@@ -84,5 +89,27 @@ public class BibliotecaControllerTest {
         mvc.perform(request)
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("errors", hasSize(3)) );
+    }
+
+    @Test
+    @DisplayName("Lança erro ao tentar cadastrar um book com isbn repitido")
+    public void createBookWithDuplicateIsbn() throws Exception{
+
+        BookDTO dto = createBook();
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+        String mensagemErro = "Isbn ja cadastrado";
+        BDDMockito.given(bibliotecaService.save(Mockito.any(Book.class))).willThrow(new BusinessException(mensagemErro));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+            .post(BOOK_API)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(json);
+
+        mvc.perform(request)
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("errors", hasSize(1)))
+            .andExpect(jsonPath("errors[0]").value(mensagemErro));
     }
 }

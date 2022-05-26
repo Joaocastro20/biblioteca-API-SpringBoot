@@ -3,6 +3,7 @@ package com.biblioteca.api.resource;
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.dto.BookDTO;
 import com.biblioteca.api.exceptions.ApiErros;
+import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,11 @@ public class BibliotecaController {
     public ApiErros handleValidException(MethodArgumentNotValidException ex){
         BindingResult bindingResult =  ex.getBindingResult();
         return new ApiErros(bindingResult);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErros handlerBusinessException(BusinessException ex){
+        return new ApiErros(ex);
     }
 }
