@@ -5,6 +5,8 @@ import com.biblioteca.repository.BibliotecaRepository;
 import com.biblioteca.service.BibliotecaService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class BibliotecaServiceImpl implements BibliotecaService {
 
@@ -17,5 +19,10 @@ public class BibliotecaServiceImpl implements BibliotecaService {
     @Override
     public Book save(Book book) {
         return repository.save(book);
+    }
+
+    @Override
+    public Optional<Book> getById(Long id) {
+        return null;
     }
 }
