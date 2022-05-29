@@ -67,5 +67,26 @@ public class BibliotecaServiceTest {
         assertThat(foundBook.get().getTitle()).isEqualTo(book.getTitle());
     }
 
+    @Test
+    @DisplayName("Deve deletar um book")
+    public void deletBook(){
+        Book book = Book.builder().id(1l).build();
 
+        Assertions.assertDoesNotThrow(() ->bibliotecaService.delete(book));
+
+        Mockito.verify(repository,Mockito.times(1)).delete(book);
+
+
+    }
+    @Test
+    @DisplayName("Deve ocorrer erro ao deletar um book")
+    public void deletInvalidBook(){
+        Book book = new Book();
+
+        Assertions.assertThrows(IllegalArgumentException.class,() ->bibliotecaService.delete(book));
+
+        Mockito.verify(repository,Mockito.never()).delete(book);
+
+
+    }
 }
