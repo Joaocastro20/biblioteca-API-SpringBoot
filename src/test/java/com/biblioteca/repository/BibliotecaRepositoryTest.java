@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Optional;
+
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
@@ -29,7 +31,7 @@ public class BibliotecaRepositoryTest {
     @DisplayName("Deve retornar verdadeiro quando houver o isbn informado")
     public void verificaIsbn(){
         String isbn = "124";
-        Book book = Book.builder().title("teste").author("teste").isbn(isbn).build();
+        Book book = createNewBook(isbn);
         entityManager.persist(book);
 
         boolean exists = bibliotecaRepository.existsByIsbn(isbn);
@@ -37,4 +39,18 @@ public class BibliotecaRepositoryTest {
         Assertions.assertThat(exists).isTrue();
     }
 
+    private Book createNewBook(String isbn){
+        return Book.builder().title("teste").author("teste").isbn(isbn).build();
+    }
+
+    @Test
+    @DisplayName("Deve obter um livro por id")
+    public void findById(){
+        Book book = createNewBook("123");
+        entityManager.persist(book);
+
+        Optional<Book> founBook =  bibliotecaRepository.findById(book.getId());
+
+        Assertions.assertThat(founBook.isPresent()).isTrue();
+    }
 }
