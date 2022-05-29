@@ -30,4 +30,9 @@ public class BibliotecaServiceImpl implements BibliotecaService {
     public void delete(Book book) {
 
     }
+
+    @Override
+    public Book update(Book book) {
+        return null;
+    }
 }
