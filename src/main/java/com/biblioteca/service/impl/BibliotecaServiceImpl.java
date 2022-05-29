@@ -23,7 +23,8 @@ public class BibliotecaServiceImpl implements BibliotecaService {
 
     @Override
     public Optional<Book> getById(Long id) {
-        return null;
+
+        return this.repository.findById(id);
     }
 
     @Override
