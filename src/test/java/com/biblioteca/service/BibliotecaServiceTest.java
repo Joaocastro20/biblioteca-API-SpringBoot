@@ -89,4 +89,22 @@ public class BibliotecaServiceTest {
 
 
     }
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void UpdateBook(){
+        long id = 1l;
+
+        Book updatingBook = Book.builder().id(id).build();
+
+        Book updateBook = createBook();
+        updateBook.setId(id);
+        Mockito.when(repository.save(updatingBook)).thenReturn(updateBook);
+
+        Book book = bibliotecaService.update(updatingBook);
+
+        assertThat(book.getId()).isEqualTo(updateBook.getId());
+        assertThat(book.getTitle()).isEqualTo(updateBook.getTitle());
+        assertThat(book.getAuthor()).isEqualTo(updateBook.getAuthor());
+        assertThat(book.getIsbn()).isEqualTo(updateBook.getIsbn());
+    }
 }
