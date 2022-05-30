@@ -3,6 +3,8 @@ package com.biblioteca.service.impl;
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.repository.BibliotecaRepository;
 import com.biblioteca.service.BibliotecaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -41,5 +43,10 @@ public class BibliotecaServiceImpl implements BibliotecaService {
             throw new IllegalArgumentException("Book id cant be null");
         }
         return this.repository.save(book);
+    }
+
+    @Override
+    public Page<Book> find(Book filter, Pageable pageRequest) {
+        return null;
     }
 }
