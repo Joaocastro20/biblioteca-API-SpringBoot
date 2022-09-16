@@ -3,6 +3,7 @@ package com.biblioteca.api.resource;
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoDTO;
+import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
 import com.biblioteca.service.EmprestimoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,6 +92,32 @@ public class EmprestimoControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect(jsonPath("errors[0]").value("book not found"))
+        ;
+    }
+
+    @Test
+    @DisplayName("deve lancar erro ao tenta empresta livro ja emprestado")
+    public void loanErrorCreate() throws Exception{
+        EmprestimoDTO dto = EmprestimoDTO.builder().isbn("123").customer("Fulano").build();
+        String json = new ObjectMapper().writeValueAsString(dto);
+        System.out.println(json);
+
+        Book book = Book.builder().id(1L).isbn("123").build();
+
+        BDDMockito.given(bibliotecaService.getByIsbn("123"))
+                .willReturn(Optional.of(book));
+
+        BDDMockito.given(emprestimoService.save(Mockito.any(Emprestimo.class)))
+                .willThrow(new BusinessException("Book already loaned"));
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(LOAN_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+        mvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value("Book already loaned"))
         ;
     }
 }
