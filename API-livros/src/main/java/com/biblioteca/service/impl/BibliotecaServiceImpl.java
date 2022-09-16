@@ -60,6 +60,6 @@ public class BibliotecaServiceImpl implements BibliotecaService {
 
     @Override
     public Optional<Book> getByIsbn(String s) {
-        return null;
+        return repository.findByIsbn(s);
     }
 }

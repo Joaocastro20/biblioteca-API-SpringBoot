@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Example;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -80,7 +83,7 @@ public class BibliotecaServiceTest {
 
         Assertions.assertDoesNotThrow(() ->bibliotecaService.delete(book));
 
-        Mockito.verify(repository,Mockito.times(1)).delete(book);
+        verify(repository, times(1)).delete(book);
 
 
     }
@@ -91,7 +94,7 @@ public class BibliotecaServiceTest {
 
         Assertions.assertThrows(IllegalArgumentException.class,() ->bibliotecaService.delete(book));
 
-        Mockito.verify(repository,Mockito.never()).delete(book);
+        verify(repository,Mockito.never()).delete(book);
 
 
     }
@@ -133,5 +136,21 @@ public class BibliotecaServiceTest {
         assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
         assertThat(result.getPageable().getPageSize()).isEqualTo(10);
 
+    }
+
+    @Test
+    @DisplayName("Deve buscar book por isbn")
+    public void findBookIsbn(){
+        String isbn = "123";
+
+        Mockito.when(repository.findByIsbn(isbn)).thenReturn(Optional.of(Book.builder().id(1l).isbn("123").build()));
+
+        Optional<Book> book = bibliotecaService.getByIsbn(isbn);
+
+        assertThat(book.isPresent()).isTrue();
+        assertThat(book.get().getId()).isEqualTo(1L);
+        assertThat(book.get().getIsbn()).isEqualTo(isbn);
+
+        verify(repository, times(1)).findByIsbn(isbn);
     }
 }
