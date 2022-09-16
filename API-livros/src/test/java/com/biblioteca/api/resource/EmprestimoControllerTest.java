@@ -5,7 +5,9 @@ import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoDTO;
 import com.biblioteca.service.BibliotecaService;
 import com.biblioteca.service.EmprestimoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -68,5 +71,26 @@ public class EmprestimoControllerTest {
         mvc.perform(requestBuilder)
                 .andExpect(status().isCreated())
                 .andExpect(content().string("1"));
+    }
+
+    @Test
+    @DisplayName("Deve lançar erro com isbn inexistente")
+    public void invalidIsbnCreate() throws Exception {
+        EmprestimoDTO dto = EmprestimoDTO.builder().isbn("123").customer("Fulano").build();
+        String json = new ObjectMapper().writeValueAsString(dto);
+        System.out.println(json);
+
+        BDDMockito.given(bibliotecaService.getByIsbn("123"))
+                .willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(LOAN_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+        mvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value("book not found"))
+        ;
     }
 }

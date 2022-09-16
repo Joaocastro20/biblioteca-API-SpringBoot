@@ -8,6 +8,7 @@ import com.biblioteca.service.EmprestimoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -22,7 +23,8 @@ public class EmprestimoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(@RequestBody EmprestimoDTO dto){
-        Book book = bibliotecaService.getByIsbn(dto.getIsbn()).get();
+        Book book = bibliotecaService.getByIsbn(dto.getIsbn())
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.BAD_REQUEST ,"book not found"));
         Emprestimo entity = Emprestimo.builder().book(book).emprestimoDate(LocalDate.now()).customer(dto.getCustomer()).build();
     entity = emprestimoService.save(entity);
     return entity.getId();
