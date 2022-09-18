@@ -5,7 +5,6 @@ import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoDTO;
 import com.biblioteca.service.BibliotecaService;
 import com.biblioteca.service.EmprestimoService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,11 +13,15 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/loans")
-@RequiredArgsConstructor
 public class EmprestimoController {
 
     private final EmprestimoService emprestimoService;
     private final BibliotecaService bibliotecaService;
+
+    public EmprestimoController(EmprestimoService emprestimoService, BibliotecaService bibliotecaService) {
+        this.emprestimoService = emprestimoService;
+        this.bibliotecaService = bibliotecaService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
