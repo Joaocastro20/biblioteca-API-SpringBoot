@@ -1,6 +1,7 @@
 package com.biblioteca.service.impl;
 
 import com.biblioteca.api.domain.Emprestimo;
+import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.service.EmprestimoService;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 
     @Override
     public Emprestimo save(Emprestimo emprestimo) {
+        if(emprestimoRepository.existsByBookAndNotReturned(emprestimo.getBook())){
+            throw new BusinessException("Book already loaned");
+        }
         return emprestimoRepository.save(emprestimo);
     }
 }
