@@ -19,7 +19,9 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String customer;
-    @OneToOne
+
+    @JoinColumn(name = "id_book")
+    @ManyToOne
     private Book book;
     private LocalDate emprestimoDate;
     private Boolean returned;

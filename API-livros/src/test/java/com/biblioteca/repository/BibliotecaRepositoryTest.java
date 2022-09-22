@@ -39,7 +39,7 @@ public class BibliotecaRepositoryTest {
         Assertions.assertThat(exists).isTrue();
     }
 
-    private Book createNewBook(String isbn){
+    public static Book createNewBook(String isbn){
         return Book.builder().title("teste").author("teste").isbn(isbn).build();
     }
 
