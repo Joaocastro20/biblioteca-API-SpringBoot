@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -82,5 +83,29 @@ public class EmprestimoServiceTest {
 
         verify(repository, never()).save(savedEmprestimo);
 
+    }
+
+    @Test
+    @DisplayName("Deve obter as informaçoes de um emprestimo pelo ID")
+    public void getByIdLoan(){
+        Emprestimo emprestimo = Emprestimo.builder().id(1L).build();
+        Book book = Book.builder().id(1l).build();
+        Emprestimo savedEmprestimo = Emprestimo.builder()
+                .id(1l)
+                .emprestimoDate(LocalDate.now())
+                .customer("fulano")
+                .book(book)
+                .build();
+        when(repository.findById(emprestimo.getId())).thenReturn(Optional.of(savedEmprestimo));
+
+        Optional<Emprestimo> result = emprestimoService.getById(emprestimo.getId());
+
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getId()).isEqualTo(savedEmprestimo.getId());
+        assertThat(result.get().getCustomer()).isEqualTo(savedEmprestimo.getCustomer());
+        assertThat(result.get().getBook()).isEqualTo(savedEmprestimo.getBook());
+        assertThat(result.get().getEmprestimoDate()).isEqualTo(savedEmprestimo.getEmprestimoDate());
+
+        verify(repository).findById(savedEmprestimo.getId());
     }
 }

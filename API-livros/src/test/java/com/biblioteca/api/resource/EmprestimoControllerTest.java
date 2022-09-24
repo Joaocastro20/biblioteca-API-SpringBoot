@@ -144,4 +144,23 @@ public class EmprestimoControllerTest {
 
         Mockito.verify(emprestimoService, Mockito.times(1)).update(emprestimo);
     }
+
+    @Test
+    @DisplayName("Deve retornar 404 ao devolver um livro existente")
+    public void returnFoundBookTest() throws Exception {
+        ReturnedEmprestimoDTO dto = ReturnedEmprestimoDTO.builder().returned(true).build();
+        Emprestimo emprestimo = Emprestimo.builder().id(1L).build();
+        BDDMockito.given(emprestimoService.getById(Mockito.anyLong())).willReturn(Optional.empty()
+        );
+
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        mvc.perform(
+                patch(LOAN_API.concat("/1"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isNotFound());
+    }
 }
