@@ -3,6 +3,7 @@ package com.biblioteca.api.resource;
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoDTO;
+import com.biblioteca.api.dto.ReturnedEmprestimoDTO;
 import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
 import com.biblioteca.service.EmprestimoService;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -119,5 +121,27 @@ public class EmprestimoControllerTest {
                 .andExpect(jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect(jsonPath("errors[0]").value("Book already loaned"))
         ;
+    }
+
+    @Test
+    @DisplayName("Deve retornar um livro")
+    public void returnBookTest() throws Exception {
+        ReturnedEmprestimoDTO dto = ReturnedEmprestimoDTO.builder().returned(true).build();
+        Emprestimo emprestimo = Emprestimo.builder().id(1L).build();
+        BDDMockito.given(emprestimoService.getById(Mockito.anyLong())).willReturn(Optional.of(
+                emprestimo
+        ));
+
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        mvc.perform(
+                patch(LOAN_API.concat("/1"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andExpect(status().isOk());
+
+        Mockito.verify(emprestimoService, Mockito.times(1)).update(emprestimo);
     }
 }

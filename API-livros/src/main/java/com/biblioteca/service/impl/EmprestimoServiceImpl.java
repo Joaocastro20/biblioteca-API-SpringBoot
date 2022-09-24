@@ -6,6 +6,8 @@ import com.biblioteca.repository.EmprestimoRepository;
 import com.biblioteca.service.EmprestimoService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class EmprestimoServiceImpl implements EmprestimoService {
 
@@ -21,5 +23,15 @@ public class EmprestimoServiceImpl implements EmprestimoService {
             throw new BusinessException("Book already loaned");
         }
         return emprestimoRepository.save(emprestimo);
+    }
+
+    @Override
+    public Optional<Emprestimo> getById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Emprestimo update(Emprestimo emprestimo) {
+        return null;
     }
 }
