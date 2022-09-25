@@ -108,4 +108,25 @@ public class EmprestimoServiceTest {
 
         verify(repository).findById(savedEmprestimo.getId());
     }
+
+    @Test
+    @DisplayName("Deve atualizar as informaçoes de um emprestimo")
+    public void updateLoan(){
+        Emprestimo emprestimo = Emprestimo.builder().id(1L).build();
+        Book book = Book.builder().id(1l).build();
+        Emprestimo savedEmprestimo = Emprestimo.builder()
+                .id(1l)
+                .returned(true)
+                .emprestimoDate(LocalDate.now())
+                .customer("fulano")
+                .book(book)
+                .build();
+        when(repository.save(savedEmprestimo)).thenReturn(savedEmprestimo);
+
+        Emprestimo result = emprestimoService.update(savedEmprestimo);
+
+        assertThat(result.getReturned()).isTrue();
+
+        verify(repository).save(savedEmprestimo);
+    }
 }
