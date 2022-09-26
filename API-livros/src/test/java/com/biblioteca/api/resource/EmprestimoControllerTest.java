@@ -3,6 +3,7 @@ package com.biblioteca.api.resource;
 import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoDTO;
+import com.biblioteca.api.dto.EmprestimoFilterDTO;
 import com.biblioteca.api.dto.ReturnedEmprestimoDTO;
 import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
@@ -19,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,12 +30,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.biblioteca.api.resource.BibliotecaControllerTest.BOOK_API;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
@@ -162,5 +168,32 @@ public class EmprestimoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json)
         ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar emprestimos")
+    public void findEmprestimoTest() throws Exception {
+        Long id = 1l;
+        Book book = Book.builder().id(1L).isbn("123").build();
+        Emprestimo emprestimo = Emprestimo.builder()
+                .book(book)
+                .build();
+
+        BDDMockito.given(emprestimoService.find(Mockito.any(EmprestimoFilterDTO.class),Mockito.any(Pageable.class)))
+                .willReturn(new PageImpl<Emprestimo>(Arrays.asList(emprestimo), PageRequest.of(0,10),1));
+
+        String queryString = String.format("?isbn=%s&customer=%s&page=0&size=10",book.getIsbn(),emprestimo.getCustomer());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(LOAN_API.concat(queryString))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("content",Matchers.hasSize(1)))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("pageable.pageSize").value(10))
+                .andExpect(jsonPath("pageable.pageNumber").value(0))
+        ;
+
     }
 }

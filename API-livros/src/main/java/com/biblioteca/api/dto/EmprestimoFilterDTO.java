@@ -7,11 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmprestimoDTO {
-
-    private Long id;
+public class EmprestimoFilterDTO {
     private String isbn;
     private String customer;
-    private BookDTO book;
-
 }
