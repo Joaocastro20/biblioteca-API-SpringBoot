@@ -1,10 +1,13 @@
 package com.biblioteca.api.resource;
 
 import com.biblioteca.api.domain.Book;
+import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.BookDTO;
+import com.biblioteca.api.dto.EmprestimoDTO;
 import com.biblioteca.api.exceptions.ApiErros;
 import com.biblioteca.exceptions.BusinessException;
 import com.biblioteca.service.BibliotecaService;
+import com.biblioteca.service.EmprestimoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,10 +30,12 @@ public class BibliotecaController {
 
     private BibliotecaService bibliotecaService;
     private ModelMapper modelMapper;
+    private EmprestimoService emprestimoService;
 
-    public BibliotecaController(BibliotecaService bibliotecaService, ModelMapper modelMapper){
+    public BibliotecaController(BibliotecaService bibliotecaService, ModelMapper modelMapper,EmprestimoService emprestimoService){
         this.bibliotecaService = bibliotecaService;
         this.modelMapper = modelMapper;
+        this.emprestimoService = emprestimoService;
     }
 
     @PostMapping
@@ -77,5 +82,21 @@ public class BibliotecaController {
     }
 
 
-
+    @GetMapping("{id}/loans")
+    public Page<EmprestimoDTO> emprestimoByBook(@PathVariable Long id, Pageable pageable){
+        Book book = bibliotecaService.getById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<Emprestimo> result = emprestimoService.getEmprestimoByBook(book,pageable);
+        List<EmprestimoDTO> list =  result.getContent()
+                .stream()
+                .map(
+                        emprestimo -> {
+                            Book emprestimoBook = emprestimo.getBook();
+                            BookDTO bookDTO = modelMapper.map(emprestimoBook,BookDTO.class);
+                            EmprestimoDTO emprestimoDTO = modelMapper.map(emprestimo,EmprestimoDTO.class);
+                            emprestimoDTO.setBook(bookDTO);
+                            return emprestimoDTO;
+                        }
+                ).collect(Collectors.toList());
+        return new PageImpl<EmprestimoDTO>(list,pageable,result.getTotalElements());
+    }
 }

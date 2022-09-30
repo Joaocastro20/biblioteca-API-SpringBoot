@@ -19,4 +19,6 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo,Long> {
     Page<Emprestimo> findByBookIsbnOrCustomer(@Param("isbn") String isbn,
                                               @Param("customer") String customer,
                                               Pageable pageable);
+
+    Page<Emprestimo> findByBook(Book book, Pageable pageable);
 }

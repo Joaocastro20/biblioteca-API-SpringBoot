@@ -1,5 +1,6 @@
 package com.biblioteca.service.impl;
 
+import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoFilterDTO;
 import com.biblioteca.exceptions.BusinessException;
@@ -41,5 +42,10 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     @Override
     public Page<Emprestimo> find(EmprestimoFilterDTO filterDTO, Pageable pageable) {
         return emprestimoRepository.findByBookIsbnOrCustomer(filterDTO.getIsbn(),filterDTO.getCustomer(),pageable);
+    }
+
+    @Override
+    public Page<Emprestimo> getEmprestimoByBook(Book book, Pageable pageable) {
+        return emprestimoRepository.findByBook(book,pageable);
     }
 }

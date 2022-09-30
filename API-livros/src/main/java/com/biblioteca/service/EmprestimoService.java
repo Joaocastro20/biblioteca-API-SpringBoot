@@ -1,5 +1,6 @@
 package com.biblioteca.service;
 
+import com.biblioteca.api.domain.Book;
 import com.biblioteca.api.domain.Emprestimo;
 import com.biblioteca.api.dto.EmprestimoFilterDTO;
 import com.biblioteca.api.resource.BibliotecaController;
@@ -16,4 +17,6 @@ public interface EmprestimoService {
     Emprestimo update(Emprestimo emprestimo);
 
     Page<Emprestimo> find(EmprestimoFilterDTO filterDTO, Pageable pageable);
+
+    Page<Emprestimo> getEmprestimoByBook(Book book, Pageable pageable);
 }
