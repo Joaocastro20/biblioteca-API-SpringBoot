@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static com.biblioteca.repository.BibliotecaRepositoryTest.createNewBook;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,5 +68,45 @@ public class EmprestimoRepositoryTest {
         assertThat(exists.getPageable().getPageNumber()).isEqualTo(0);
         assertThat(exists.getTotalElements()).isEqualTo(1);
 
+    }
+
+    @Test
+    @DisplayName("Deve filtrar emprestimos que nao foram retornados")
+    public void findByEmprestimoDateLessThanAndNotReturnedTest(){
+        Book book = Book.builder().isbn("123").build();
+        entityManager.persist(book);
+
+        Emprestimo emprestimo = Emprestimo.builder()
+                .book(book)
+                .customer("Fulano")
+                .emprestimoDate(LocalDate.now().minusDays(5)).build();
+        entityManager.persist(emprestimo);
+
+        List<Emprestimo> result = repository.findByEmprestimoDateLessThanAndNotReturned(
+                LocalDate.now().minusDays(4)
+        );
+
+
+        assertThat(result).hasSize(1).contains(emprestimo);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 0 ao filtrar emprestimos que nao foram retornados")
+    public void findNotByEmprestimoDateLessThanAndNotReturnedTest(){
+        Book book = Book.builder().isbn("123").build();
+        entityManager.persist(book);
+
+        Emprestimo emprestimo = Emprestimo.builder()
+                .book(book)
+                .customer("Fulano")
+                .emprestimoDate(LocalDate.now()).build();
+        entityManager.persist(emprestimo);
+
+        List<Emprestimo> result = repository.findByEmprestimoDateLessThanAndNotReturned(
+                LocalDate.now().minusDays(4)
+        );
+
+
+        assertThat(result).isEmpty();
     }
 }

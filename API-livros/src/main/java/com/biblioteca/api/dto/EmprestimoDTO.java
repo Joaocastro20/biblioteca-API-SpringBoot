@@ -12,6 +12,7 @@ public class EmprestimoDTO {
     private Long id;
     private String isbn;
     private String customer;
+    private String email;
     private BookDTO book;
 
 }

@@ -20,6 +20,9 @@ public class Emprestimo {
     private Long id;
     private String customer;
 
+    @Column(name = "customer_email")
+    private String customerEmail;
+
     @JoinColumn(name = "id_book")
     @ManyToOne
     private Book book;
