@@ -10,13 +10,15 @@ import { Book } from '../shared/models/book';
 })
 export class LivrosHomeComponent implements OnInit {
 
-  listBooks!: any;
+  listBooks!: any[];
 
   constructor(private service: LivrosServiceService) { }
 
   ngOnInit(): void {
-     this.listBooks = this.service.listBooks();
-     console.log(this.listBooks)
+    this.service.listBooks().subscribe(
+      books => {
+        this.listBooks = books;
+      }
+    );
   }
-
 }
