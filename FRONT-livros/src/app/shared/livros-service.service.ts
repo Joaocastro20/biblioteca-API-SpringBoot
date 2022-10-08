@@ -24,4 +24,7 @@ export class LivrosServiceService {
     );
   }
 
+  salvarBook(book:Book){
+    return this.http.post(this.API,book);
+  }
 }
