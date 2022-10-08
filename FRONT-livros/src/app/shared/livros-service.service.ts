@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http'
 import { Book } from './models/book';
-import {map} from 'rxjs/operators'
+import {map,take} from 'rxjs/operators'
 import { ResolveData } from '@angular/router';
 
 @Injectable({
@@ -26,5 +26,17 @@ export class LivrosServiceService {
 
   salvarBook(book:Book){
     return this.http.post(this.API,book);
+  }
+
+  atualizarBook(book:Book){
+    return this.http.put(`${this.API}/${book.id}`,book).pipe(take(1));
+  }
+
+  deletarBook(book:Book){
+    return this.http.delete(`${this.API}/${book.id}`).pipe(take(1));
+  }
+
+  buscarBookId(id:any){
+    return this.http.get(`${this.API}/${id}`).pipe(take(1));
   }
 }

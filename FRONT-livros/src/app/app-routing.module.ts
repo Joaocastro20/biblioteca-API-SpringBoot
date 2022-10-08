@@ -5,7 +5,8 @@ import { LivrosHomeComponent } from './livros-home/livros-home.component';
 
 const routes: Routes = [
   {path: '',component:LivrosHomeComponent},
-  {path:'cadastrar',component:LivrosCadastrarComponent}
+  {path:'cadastrar',component:LivrosCadastrarComponent},
+  {path:'editar/:id',component:LivrosCadastrarComponent}
 ];
 
 @NgModule({

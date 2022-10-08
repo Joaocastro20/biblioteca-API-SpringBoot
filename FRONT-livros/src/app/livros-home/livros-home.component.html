@@ -13,6 +13,8 @@
         <td>{{book.title}}</td>
         <td>{{book.isbn}}</td>
         <td>{{book.author}}</td>
+        <td><button (click)="updateBook(book)">Atualizar</button></td>
+        <td><button (click)="deletarBook(book)">Deletar</button></td>
       </tr>
     </tbody>
   </table>
