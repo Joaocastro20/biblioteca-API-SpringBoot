@@ -26,6 +26,10 @@ export class LivrosHomeComponent implements OnInit {
     );
   }
 
+  loanBook(book:Book){
+    this.router.navigate(['emprestimo',book.id])
+  }
+
   updateBook(book:Book){
     this.router.navigate(['editar',book.id]);
   }

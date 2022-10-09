@@ -1,0 +1,21 @@
+<button (click)="testar()">testa</button>
+<div class="card" style="width: 18rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item" style="font-size: 20px;">INFORMAÇOES DO LIVRO</li>
+        <li class="list-group-item">ID: {{formBook.value.id}}</li>
+        <li class="list-group-item">TITULO: {{formBook.value.title}}</li>
+        <li class="list-group-item">AUTOR: {{formBook.value.author}}</li>
+        <li class="list-group-item">CODIGO: {{formBook.value.isbn}}</li>
+    </ul>
+</div>
+<div>
+    <form [formGroup]="formEmprestimo" (ngSubmit)="onSubmit()">
+        <div class="col-sm-12">
+            <label for="nome">Nome</label>
+        </div>
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="customer" placeholder="Nome" formControlName="customer">
+        </div>
+        <button type="submit">Salvar Emprestimo</button>
+    </form>
+</div>

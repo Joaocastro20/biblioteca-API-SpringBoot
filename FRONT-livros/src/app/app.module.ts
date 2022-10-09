@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LivrosHomeComponent } from './livros-home/livros-home.component';
 import { LivrosCadastrarComponent } from './livros-cadastrar/livros-cadastrar.component';
+import { LivrosEmprestimoCadastrarComponent } from './livros-emprestimo-cadastrar/livros-emprestimo-cadastrar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LivrosHomeComponent,
-    LivrosCadastrarComponent
+    LivrosCadastrarComponent,
+    LivrosEmprestimoCadastrarComponent
   ],
   imports: [
     BrowserModule,

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API:'https://biblioteca-joaocastro-api.herokuapp.com/api/books/'
+  API:'https://biblioteca-joaocastro-api.herokuapp.com'
 };
 
 /*
