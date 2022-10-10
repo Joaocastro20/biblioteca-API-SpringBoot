@@ -6,6 +6,7 @@ import {map,take} from 'rxjs/operators'
 import { ResolveData } from '@angular/router';
 import { Emprestimo } from './models/emprestimo';
 import { FormGroup } from '@angular/forms';
+import { ResponseData } from './models/responseData';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,15 @@ export class LivrosServiceService {
 
   salvarLoan(emprestimo:FormGroup){ 
     return this.http.post(`${this.API}/api/loans/`,emprestimo.value)
+  }
+
+  filtrarLoan(search:any){
+    return this.http.get<ResolveData>(`${this.API}/api/loans/?${search}`).pipe(
+      map(
+        resp => {
+          return resp['content'];
+          console.log(resp);
+        }
+      ))
   }
 }

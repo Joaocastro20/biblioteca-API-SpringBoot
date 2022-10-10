@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <select class="form-select" aria-label="Default select example" #option>
+                <option value="1">Nome</option>
+                <option value="2">Codigo</option>
+            </select>
+            <div class="col-sm">
+                <input type="text" #search>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="onSearch(search.value,option.value)">Pesquisar</button>
+            </div>
+        </div>
+
+
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Codigo</th>
+                <th scope="col">Livro</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let emprestimo of emprestimos">
+                <th scope="row">{{emprestimo.id}}</th>
+                <td>{{emprestimo.customer}}</td>
+                <td>{{emprestimo.book.isbn}}</td>
+                <td>{{emprestimo.book.title}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+
+
+</div>
