@@ -91,9 +91,4 @@ export class LivrosEmprestimoCadastrarComponent implements OnInit {
     })
   }
 
-  testar() {
-    console.log(this.formEmprestimo);
-    console.log(this.formBook);
-  }
-
 }
