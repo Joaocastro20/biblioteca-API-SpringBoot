@@ -19,9 +19,18 @@
                         <input type="text" class="form-control" id="customer" placeholder="Nome"
                             formControlName="customer">
                     </div>
-                    <button type="submit">Salvar Emprestimo</button>
+                    <div class="col-sm">
+                        <label for="nome">Email</label>
+                    </div>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="email" placeholder="Email"
+                            formControlName="email">
+                    </div>
+                    <button class="btn btn-primary" type="submit" [disabled]="!validarFormEmprestimo()">Salvar Emprestimo</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators'
 import { LivrosServiceService } from '../shared/livros-service.service';
@@ -35,8 +35,8 @@ export class LivrosEmprestimoCadastrarComponent implements OnInit {
     this.formEmprestimo = this.formBuilder.group({
       id: [null],
       isbn: [null],
-      customer: [null],
-      email: [null],
+      customer: [null,[Validators.required,Validators.minLength(3), Validators.maxLength(20)]],
+      email: [null,[Validators.required,Validators.email]],
       book: this.formBuilder.group({
         id: [null],
         title: [null],
@@ -89,6 +89,10 @@ export class LivrosEmprestimoCadastrarComponent implements OnInit {
     this.formEmprestimo.patchValue({
       isbn: this.formBook.value.isbn
     })
+  }
+
+  validarFormEmprestimo(){
+    return this.formEmprestimo.valid;
   }
 
 }
