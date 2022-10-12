@@ -40,7 +40,7 @@ public class EmprestimoController {
     public Long create(@RequestBody EmprestimoDTO dto){
         Book book = bibliotecaService.getByIsbn(dto.getIsbn())
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.BAD_REQUEST ,"book not found"));
-        Emprestimo entity = Emprestimo.builder().book(book).emprestimoDate(LocalDate.now()).customer(dto.getCustomer()).build();
+        Emprestimo entity = Emprestimo.builder().customerEmail(dto.getEmail()).book(book).emprestimoDate(LocalDate.now()).customer(dto.getCustomer()).build();
     entity = emprestimoService.save(entity);
     return entity.getId();
     }

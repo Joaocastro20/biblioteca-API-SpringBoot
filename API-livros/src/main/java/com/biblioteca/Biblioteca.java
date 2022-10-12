@@ -21,14 +21,14 @@ public class Biblioteca {
     @Autowired
     private EmailService emailService;
 
-    @Bean
+    /*@Bean
     public CommandLineRunner runner(){
         return args -> {
             List<String> emails = Arrays.asList("45bbbaac2b-7feb62@inbox.mailtrap.io");
             emailService.sendMails(emails,"Testando serviço");
             System.out.println("enviou!");
         };
-    }
+    }*/
 
     @Bean
     public ModelMapper modelMapper(){
