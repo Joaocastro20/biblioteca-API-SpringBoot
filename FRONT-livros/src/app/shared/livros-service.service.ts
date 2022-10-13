@@ -32,7 +32,8 @@ export class LivrosServiceService {
   }
 
   atualizarBook(book:Book){
-    return this.http.put(`${this.API}/api/books/${book.id}`,book).pipe(take(1));
+    let param = `${book.id}?id=${book.id}&title=${book.title}&author=${book.author}`;
+    return this.http.put(`${this.API}/api/books/${param}`,book).pipe(take(1));
   }
 
   deletarBook(book:Book){

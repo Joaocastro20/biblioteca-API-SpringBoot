@@ -65,4 +65,8 @@ export class LivrosCadastrarComponent implements OnInit {
     this.formBook.reset();
   }
 
+  verificaForm(){
+    return this.formBook.value.id;
+  }
+
 }

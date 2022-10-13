@@ -16,10 +16,10 @@
                         <input type="text" class="form-control" id="author" placeholder="Autor"
                             formControlName="author">
                     </div>
-                    <div class="col-sm-12">
+                    <div *ngIf="!verificaForm()" class="col-sm-12">
                         <label for="">Codigo</label>
                     </div>
-                    <div class="col-sm-12">
+                    <div *ngIf="!verificaForm()" class="col-sm-12">
                         <input type="text" class="form-control" id="isbn" placeholder="Codigo" formControlName="isbn">
                     </div>
 
