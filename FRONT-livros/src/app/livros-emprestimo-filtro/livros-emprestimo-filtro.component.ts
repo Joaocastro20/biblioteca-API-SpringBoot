@@ -38,4 +38,11 @@ export class LivrosEmprestimoFiltroComponent implements OnInit {
     return null;
   }
 
+  onDelvolver(emprestimo:Emprestimo){
+    this.service.devolutionLoan(emprestimo).subscribe(
+      sucess => alert('successo'),
+      error => alert('Error, Livro ja emprestado')
+    );
+  }
+
 }

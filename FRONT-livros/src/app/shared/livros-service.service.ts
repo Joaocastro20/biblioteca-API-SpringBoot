@@ -6,7 +6,8 @@ import {map,take} from 'rxjs/operators'
 import { ResolveData } from '@angular/router';
 import { Emprestimo } from './models/emprestimo';
 import { FormGroup } from '@angular/forms';
-import { ResponseData } from './models/responseData';
+import { Returned } from './models/returned';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ export class LivrosServiceService {
 
   private readonly API = `${environment.API}`;
 
-  constructor(private http:HttpClient) { }
+  constructor(
+    private http:HttpClient
+    ) { }
 
   listBooks(){
     return this.http.get<ResolveData>(`${this.API}/api/books/`).pipe(
@@ -57,4 +60,15 @@ export class LivrosServiceService {
         }
       ))
   }
+
+  devolutionLoan(emprestimo:Emprestimo){
+    console.log(emprestimo)
+    var teste = {
+      returned: true
+    }
+    return this.http.patch(`${this.API}/api/loans/${emprestimo.id}`,teste);
+  }
+
+  
 }
+
