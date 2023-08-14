@@ -1,23 +1,25 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light;">
-  <div class="container">
-    <a class="navbar-brand" href="#"><i class="bi bi-book"></i></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-dark bg-primary">
+  <form class="form-inline">
+    <a class="navbar-brand" style="margin-left: 20px" [routerLink]="['/']"
+      ><i class="bi bi-book"></i
+    ></a>
+    <button class="btn btn-outline-success" [routerLink]="['/']" type="button">
+      <span>Home</span> <span class="sr-only">(livros)</span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['/']"><span>Home</span> <span class="sr-only">(livros)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['emprestimo-filtro']"><span>Emprestimos</span> </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['cadastrar']"><span>Cadastrar </span> <span class="sr-only">(livros)</span> </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  </nav>
-  <router-outlet></router-outlet>
+    <button
+      class="btn btn-outline-success"
+      [routerLink]="['emprestimo-filtro']"
+      type="button"
+    >
+      <span>Emprestimos</span>
+    </button>
+    <button
+      class="btn btn-outline-success"
+      [routerLink]="['cadastrar']"
+      type="button"
+    >
+      <span>Cadastrar </span> <span class="sr-only">(livros)</span>
+    </button>
+  </form>
+</nav>
+<router-outlet></router-outlet>

@@ -4,20 +4,20 @@
             <form [formGroup]="formBook" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <label for="">Titulo</label>
+                        <label class="tituloCadastrar">Titulo</label>
                     </div>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="title" placeholder="Titulo" formControlName="title">
                     </div>
                     <div class="col-sm-12">
-                        <label for="">Autor</label>
+                        <label class="tituloCadastrar">Autor</label>
                     </div>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="author" placeholder="Autor"
                             formControlName="author">
                     </div>
                     <div *ngIf="!verificaForm()" class="col-sm-12">
-                        <label for="">Codigo</label>
+                        <label class="tituloCadastrar">Codigo</label>
                     </div>
                     <div *ngIf="!verificaForm()" class="col-sm-12">
                         <input type="text" class="form-control" id="isbn" placeholder="Codigo" formControlName="isbn">
