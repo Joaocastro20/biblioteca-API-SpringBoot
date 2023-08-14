@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API:'https://biblioteca-joaocastro-api.herokuapp.com'
+  API:'http://localhost:8080/'
+  // API:'https://biblioteca-joaocastro-api.herokuapp.com'
 };
 
 /*
